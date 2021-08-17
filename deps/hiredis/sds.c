@@ -125,18 +125,22 @@ void sdsclear(sds s) {
  * bytes after the end of the string, plus one more byte for nul term.
  * 
  * Note: this does not change the *length* of the sds string as returned
- * by sdslen(), but only the free buffer space we have. */
+ * by sdslen(), but only the free buffer space we have.
+ * 空间分配函数
+ * */
 sds sdsMakeRoomFor(sds s, size_t addlen) {
     struct sdshdr *sh, *newsh;
     size_t free = sdsavail(s);
     size_t len, newlen;
 
-    if (free >= addlen) return s;
+    if (free >= addlen) return s;//空闲空间够 不分配
     len = sdslen(s);
     sh = (void*) (s-(sizeof(struct sdshdr)));
     newlen = (len+addlen);
+    //新长度<1MB    分配两倍的新长度
     if (newlen < SDS_MAX_PREALLOC)
         newlen *= 2;
+    //否则分配1MB
     else
         newlen += SDS_MAX_PREALLOC;
     newsh = zrealloc(sh, sizeof(struct sdshdr)+newlen+1);

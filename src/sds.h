@@ -32,7 +32,7 @@
 #define __SDS_H
 
 /*
- * 最大预分配长度
+ * 最大预分配长度  单位为字节   即1MB
  */
 #define SDS_MAX_PREALLOC (1024*1024)
 
@@ -65,7 +65,7 @@ struct sdshdr {
  * T = O(1)
  */
 static inline size_t sdslen(const sds s) {
-    struct sdshdr *sh = (void*)(s-(sizeof(struct sdshdr)));
+    struct sdshdr *sh = (void*)(s-(sizeof(struct sdshdr)));//这就是c语言吗 i了
     return sh->len;
 }
 

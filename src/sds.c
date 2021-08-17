@@ -92,6 +92,8 @@ sds sdsnewlen(const void *init, size_t initlen) {
     sh->buf[initlen] = '\0';
 
     // 返回 buf 部分，而不是整个 sdshdr
+    //如何拿到整个sds对象 :
+    // struct sdshdr *sh = (void*)(s-(sizeof(struct sdshdr)));
     return (char*)sh->buf;
 }
 

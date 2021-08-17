@@ -45,6 +45,7 @@ typedef struct listNode {
     struct listNode *next;
 
     // 节点的值
+    // void*类型    实现多态  相当于java模板
     void *value;
 
 } listNode;

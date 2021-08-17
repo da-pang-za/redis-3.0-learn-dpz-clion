@@ -79,7 +79,7 @@ typedef struct list {
 
     // 节点值释放函数
     // 函数赋值的地方
-    //在宏中设置 比如：
+    //在宏#define listSetFreeMethod(l,m) ((l)->free = (m))中设置 比如：
     // listSetFreeMethod(server.pubsub_patterns,freePubsubPattern);
     void (*free)(void *ptr);
 

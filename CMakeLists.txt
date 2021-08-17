@@ -84,3 +84,18 @@ target_link_libraries(redis-cli
         )
 
 link_directories(deps/hiredis/ deps/linenoise/ diredeps/lua/src)
+
+add_executable(redis-example tests/sds_test.c)
+target_include_directories(redis-example
+        PRIVATE ${REDIS_ROOT}/deps/linenoise
+        PRIVATE ${REDIS_ROOT}/deps/hiredis
+        PRIVATE ${REDIS_ROOT}/deps/lua/src
+        )
+target_link_libraries(redis-example
+        PRIVATE pthread
+        PRIVATE dl
+        PRIVATE m
+        PRIVATE lua
+        PRIVATE linenoise
+        PRIVATE hiredis
+        )

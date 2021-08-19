@@ -248,7 +248,7 @@ typedef void (dictScanFunction)(void *privdata, const dictEntry *de);
 #define dictSlots(d) ((d)->ht[0].size+(d)->ht[1].size)
 // 返回字典的已有节点数量
 #define dictSize(d) ((d)->ht[0].used+(d)->ht[1].used)
-// 查看字典是否正在 rehash
+// 查看字典是否正在 rehash   rehash时 操作会在两个hash表上进行
 #define dictIsRehashing(ht) ((ht)->rehashidx != -1)
 
 /* API */

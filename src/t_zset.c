@@ -695,6 +695,7 @@ unsigned long zslGetRank(zskiplist *zsl, double score, robj *o) {
 
     // 遍历整个跳跃表
     x = zsl->header;
+    //从高层开始找
     for (i = zsl->level-1; i >= 0; i--) {
 
         // 遍历节点并对比元素
@@ -708,7 +709,7 @@ unsigned long zslGetRank(zskiplist *zsl, double score, robj *o) {
             // 累积跨越的节点数量
             rank += x->level[i].span;
 
-            // 沿着前进指针遍历跳跃表
+            // 沿着前进指针遍历跳跃表    右移
             x = x->level[i].forward;
         }
 

@@ -194,6 +194,7 @@ int zslRandomLevel(void) {
  * 函数的返回值为新节点。
  *
  * T_wrost = O(N^2), T_avg = O(N log N)
+ * TODO
  */
 zskiplistNode *zslInsert(zskiplist *zsl, double score, robj *obj) {
     zskiplistNode *update[ZSKIPLIST_MAXLEVEL], *x;

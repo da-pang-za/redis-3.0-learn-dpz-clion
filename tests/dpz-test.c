@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "sds.h"
-
 //sds内存预分配
 void testSDSRoomAlloc() {
     sds s = sdscat(sdsempty(), "Redis");
@@ -26,11 +25,9 @@ void testCstr() {
 
 
 }
-
 int main(void) {
 
 
-    testCstr();
     return 0;
 
 }

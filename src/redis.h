@@ -403,7 +403,7 @@ typedef struct redisObject {
     // 类型
     unsigned type:4;//结构体中的冒号表示位域
 
-    // 编码  val底层使用的数据结构  P96
+    // 编码  val底层使用的数据结构  P96、97
     unsigned encoding:4;
 
     // 对象最后一次被访问的时间

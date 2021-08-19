@@ -1,6 +1,6 @@
 /* The ziplist is a specially encoded dually linked list that is designed
  * to be very memory efficient. 
- *
+ *todo 先跳过
  * Ziplist 是为了尽可能地节约内存而设计的特殊编码双端链表。
  *
  * It stores both strings and integer values,

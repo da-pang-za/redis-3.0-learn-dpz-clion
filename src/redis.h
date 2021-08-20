@@ -451,12 +451,13 @@ struct evictionPoolEntry {
 /* Redis database representation. There are multiple databases identified
  * by integers from 0 (the default database) up to the max configured
  * database. The database number is the 'id' field in the structure. */
+//一个Redis数据库   从0开始
 typedef struct redisDb {
 
     // 数据库键空间，保存着数据库中的所有键值对
     dict *dict;                 /* The keyspace for this DB */
 
-    // 键的过期时间，字典的键为键，字典的值为过期事件 UNIX 时间戳
+    // 键的过期时间，字典的键为键，字典的值为过期时间 UNIX 时间戳
     dict *expires;              /* Timeout of keys with a timeout set */
 
     // 正处于阻塞状态的键

@@ -322,6 +322,8 @@ robj *createZsetZiplistObject(void) {
 void freeStringObject(robj *o) {
     if (o->encoding == REDIS_ENCODING_RAW) {
         sdsfree(o->ptr);
+        //基本类型怎么回收  直接给内存free了呀！你是不是傻
+        // 联想 Java对象里面的基本类型放在那里 如何回收
     }
 }
 

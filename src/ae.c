@@ -45,7 +45,10 @@
 #include "config.h"
 
 /* Include the best multiplexing layer supported by this system.
- * The following should be ordered by performances, descending. */
+ * The following should be ordered by performances, descending.
+ * 编译时自动选择系统中性能最高的I/O多路复用函数库来作为Redis的
+ * I/O多路复用程序的底层实现
+ */
 #ifdef HAVE_EVPORT
 #include "ae_evport.c"
 #else
@@ -165,7 +168,8 @@ void aeStop(aeEventLoop *eventLoop) {
 
 /*
  * 根据 mask 参数的值，监听 fd 文件的状态，
- * 当 fd 可用时，执行 proc 函数
+ *
+ * <em>当 fd 可用时，执行 proc 函数</em>
  */
 int aeCreateFileEvent(aeEventLoop *eventLoop, int fd, int mask,
         aeFileProc *proc, void *clientData)

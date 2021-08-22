@@ -564,7 +564,7 @@ typedef struct readyList {
  */
 typedef struct redisClient {
 
-    // 套接字描述符
+    // *套接字*描述符
     int fd;
 
     // 当前正在使用的数据库
@@ -576,7 +576,7 @@ typedef struct redisClient {
     // 客户端的名字
     robj *name;             /* As set by CLIENT SETNAME */
 
-    // 查询缓冲区
+    // 查询缓冲区  查询的命令
     sds querybuf;
 
     // 查询缓冲区长度峰值
@@ -586,6 +586,8 @@ typedef struct redisClient {
     int argc;
 
     // 参数对象数组
+    //argv属性是一个数组，数组中的每个项都是一个字符串对象，
+    //其中argv[0]是要执行的命令， 而之后的其他项则是传给命令的参数
     robj **argv;
 
     // 记录被客户端执行的命令
@@ -834,7 +836,7 @@ struct redisServer {
     // 配置文件的绝对路径
     char *configfile;           /* Absolute config file path, or NULL */
 
-    // serverCron() 每秒调用的次数
+    // serverCron() 每秒调用的次数    默认为10次   即100ms一次
     int hz;                     /* serverCron() calls frequency in hertz */
 
     // 数据库
@@ -1038,7 +1040,7 @@ struct redisServer {
     // AOF 状态（开启/关闭/可写）
     int aof_state;                  /* REDIS_AOF_(ON|OFF|WAIT_REWRITE) */
 
-    // 所使用的 fsync 策略（每个写入/每秒/从不）
+    // AOF三种模式:所使用的 fsync 策略（每个写入/每秒/从不）
     int aof_fsync;                  /* Kind of fsync() policy */
     char *aof_filename;             /* Name of the AOF file */
     int aof_no_fsync_on_rewrite;    /* Don't fsync if a rewrite is in prog. */
@@ -1058,7 +1060,7 @@ struct redisServer {
     // AOF 重写缓存链表，链接着多个缓存块
     list *aof_rewrite_buf_blocks;   /* Hold changes during an AOF rewrite. */
 
-    // AOF 缓冲区
+    // AOF 缓冲区 命令追加先写到缓冲区
     sds aof_buf;      /* AOF buffer, written before entering the event loop */
 
     // AOF 文件的描述符
@@ -1089,7 +1091,7 @@ struct redisServer {
     int aof_last_write_errno;       /* Valid if aof_last_write_status is ERR */
     /* RDB persistence */
 
-    // 自从上次 SAVE 执行以来，数据库被修改的次数
+    // 自从上次 SAVE 执行以来， 数据库被 *修改* 的次数
     long long dirty;                /* Changes to DB from the last save */
 
     // BGSAVE 执行前的数据库被修改次数
@@ -1098,13 +1100,13 @@ struct redisServer {
     // 负责执行 BGSAVE 的子进程的 ID
     // 没在执行 BGSAVE 时，设为 -1
     pid_t rdb_child_pid;            /* PID of RDB saving child */
-    struct saveparam *saveparams;   /* Save points array for RDB */
+    struct saveparam *saveparams;   /*RDB配置选项 Save points array for RDB */
     int saveparamslen;              /* Number of saving points */
     char *rdb_filename;             /* Name of RDB file */
     int rdb_compression;            /* Use compression in RDB? */
     int rdb_checksum;               /* Use RDB checksum? */
 
-    // 最后一次完成 SAVE 的时间
+    // 最后一次完成 SAVE 的时间 Unix时间戳
     time_t lastsave;                /* Unix time of last successful save */
 
     // 最后一次尝试执行 BGSAVE 的时间
@@ -1343,19 +1345,25 @@ typedef int *redisGetKeysProc(struct redisCommand *cmd, robj **argv, int argc, i
  */
 struct redisCommand {
 
-    // 命令名字
+    // 命令名字  比如 set get
     char *name;
 
     // 实现函数
     redisCommandProc *proc;
 
     // 参数个数
+    //值为-N 代表 参数个数大于等于N
     int arity;
 
     // 字符串表示的 FLAG
+    /**
+     * 字符串形式的标识值，这个值记录了命令的属性，比如这个
+     * 命令是写命令还是读命令，这个命令是否允许在载人数据时使用，
+     * 这个命令是否允许在Lua脚本中使用等等
+     */
     char *sflags; /* Flags as string representation, one char per flag. */
 
-    // 实际 FLAG
+    // 实际 FLAG  二进制标识  根据sflags生产
     int flags;    /* The actual flags, obtained from the 'sflags' field. */
 
     /* Use a function to determine keys arguments in a command line.

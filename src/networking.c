@@ -1543,6 +1543,7 @@ void processInputBuffer(redisClient *c) {
 }
 
 /*
+ * Redis的命令请求处理器
  * 读取客户端的查询缓冲区内容
  */
 void readQueryFromClient(aeEventLoop *el, int fd, void *privdata, int mask) {

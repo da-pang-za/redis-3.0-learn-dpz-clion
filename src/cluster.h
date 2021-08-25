@@ -126,7 +126,7 @@ struct clusterNodeFailReport {
 } typedef clusterNodeFailReport;
 
 
-// 节点状态
+// 集群节点状态
 struct clusterNode {
 
     // 创建节点的时间

@@ -6,7 +6,7 @@ if (NOT CMAKE_BUILD_TYPE)
     message(STATUS "No build type defined; defaulting to 'Debug'")
     set(CMAKE_BUILD_TYPE "Debug" CACHE STRING
             "The type of build. Possible values are: Debug, Release, RelWithDebInfo and MinSizeRel.")
-endif()
+endif ()
 
 message(STATUS "Host is: ${CMAKE_HOST_SYSTEM}.  Build target is: ${CMAKE_SYSTEM}")
 get_filename_component(REDIS_ROOT "${CMAKE_CURRENT_SOURCE_DIR}" ABSOLUTE)
@@ -15,10 +15,10 @@ message(STATUS "Project root directory is: ${REDIS_ROOT}")
 # Just for debugging when handling a new platform.
 if (false)
     message("C++ compiler supports these language features:")
-    foreach(i ${CMAKE_CXX_COMPILE_FEATURES})
+    foreach (i ${CMAKE_CXX_COMPILE_FEATURES})
         message("  ${i}")
-    endforeach()
-endif()
+    endforeach ()
+endif ()
 
 message(STATUS "Generating release.h...")
 execute_process(
@@ -39,7 +39,7 @@ set(SRC_CLI
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     # better not to work with jemalloc
-endif()
+endif ()
 
 add_executable(redis-server ${SRC_SERVER})
 add_executable(redis-cli ${SRC_CLI})
@@ -86,6 +86,8 @@ target_link_libraries(redis-cli
 link_directories(deps/hiredis/ deps/linenoise/ diredeps/lua/src)
 
 add_executable(redis-example tests/dpz-test.c)
+add_executable(c-learn tests/cLearn.c)  #c语言学习
+
 target_include_directories(redis-example
         PRIVATE ${REDIS_ROOT}/deps/linenoise
         PRIVATE ${REDIS_ROOT}/deps/hiredis

@@ -87,6 +87,8 @@ link_directories(deps/hiredis/ deps/linenoise/ diredeps/lua/src)
 
 add_executable(redis-example tests/dpz-test.c)
 add_executable(c-learn tests/cLearn.c)  #c语言学习
+add_executable(prog tests/prog.c)  #c语言学习  《深入理解计算机系统》p152
+
 
 target_include_directories(redis-example
         PRIVATE ${REDIS_ROOT}/deps/linenoise

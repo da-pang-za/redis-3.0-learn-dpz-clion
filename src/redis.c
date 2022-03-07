@@ -814,7 +814,7 @@ int activeExpireCycleTryExpire(redisDb *db, dictEntry *de, long long now) {
  * it will get more aggressive to avoid that too much memory is used by
  * keys that can be removed from the keyspace.
  *
- * 函数尝试删除数据库中已经过期的键。
+ * activeExpireCycle函数尝试删除数据库中已经过期的键。
  * 当带有过期时间的键比较少时，函数运行得比较保守，
  * 如果带有过期时间的键比较多，那么函数会以更积极的方式来删除过期键，
  * 从而可能地释放被过期键占用的内存。
@@ -943,8 +943,7 @@ void activeExpireCycle(int type) {
             }
             // 获取数据库中键值对的数量
             slots = dictSlots(db->expires);
-            // 当前时间
-            now = mstime();
+            now = mstime();// 当前时间
 
             /* When there are less than 1% filled slots getting random
              * keys is expensive, so stop here waiting for better times...
@@ -1565,7 +1564,7 @@ int serverCron(struct aeEventLoop *eventLoop, long long id, void *clientData) {
 /* This function gets called every time Redis is entering the
  * main loop of the event driven library, that is, before to sleep
  * for ready file descriptors. */
-// 每次处理事件之前执行
+// 每次处理事件之前要执行的操作
 void beforeSleep(struct aeEventLoop *eventLoop) {
     REDIS_NOTUSED(eventLoop);
 
@@ -1887,7 +1886,10 @@ void initServerConfig() {
  *
  * If it will not be possible to set the limit accordingly to the configured
  * max number of clients, the function will do the reverse setting
- * server.maxclients to the value that we can actually handle. */
+ * server.maxclients to the value that we can actually handle.
+ * 修改Redis系统限制   进程文件描述符数限制
+ * 参考：man setrlimit
+ * */
 void adjustOpenFilesLimit(void) {
     rlim_t maxfiles = server.maxclients+REDIS_MIN_RESERVED_FDS;
     struct rlimit limit;
@@ -2046,7 +2048,9 @@ void resetServerStats(void) {
     server.ops_sec_last_sample_time = mstime();
     server.ops_sec_last_sample_ops = 0;
 }
-
+/**
+ * 初始化服务器  设置信号处理函数  数据结构 系统配置  启动事件循环
+ */
 void initServer() {
     int j;
 
@@ -2077,6 +2081,7 @@ void initServer() {
     // 创建共享对象
     createSharedObjects();
     adjustOpenFilesLimit();
+    //事件循环
     server.el = aeCreateEventLoop(server.maxclients+REDIS_EVENTLOOP_FDSET_INCR);
     server.db = zmalloc(sizeof(redisDb)*server.dbnum);
 
@@ -2155,6 +2160,7 @@ void initServer() {
 
     /* Create an event handler for accepting new connections in TCP and Unix
      * domain sockets. */
+    //createSocketAcceptHandler
     // 为 TCP 连接关联连接应答（accept）处理器
     // 用于接受并应答客户端的 connect() 调用
     for (j = 0; j < server.ipfd_count; j++) {
